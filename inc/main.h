@@ -7,8 +7,9 @@
 */
 
 // Project includes
-#include "../inc/common.h"
-#include "../inc/class.id.h"
+#include "common.h"
+#include "class.id.h"
+#include "argParse.h"
 
 // Const defines
 const char* helpOutput = "\e[39mVersion:  1.0.0 \

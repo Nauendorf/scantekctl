@@ -2,6 +2,9 @@
 
 int main(int argc, char*argv[])
 {
+    
+    Document *d = new Document;
+
     if ( ( ( strcmp((argv)[1], "help") == 0 ) || 
     ( strcmp((argv)[1], "-h") == 0 ) ) && 
     ( argc == 2 ) )
@@ -19,11 +22,15 @@ int main(int argc, char*argv[])
     {
         if (( strcmp((argv)[i], "id") == 0 ) )
         {
-            std::cout << "ID diag functions" << "\n";
-        }
-        else if (( strcmp((argv)[i], "id") == 0 ) )
-        {
-
+            int j = i+1;
+            try
+            {   
+                cv::Mat img = cv::imread((argv)[j]);
+                //float irBrightness  = d->getIrBrightness(img);
+                //float uvBrighPecent = d->getUvPercentage(img);
+            }
+            catch(const std::exception& e)
+            {   std::cerr << e.what() << '\n';  }
         }
         else
         {

@@ -7,3 +7,6 @@
 #include <fstream>
 #include <string>
 #include <map>
+// Library includes
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>

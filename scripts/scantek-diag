@@ -1,0 +1,121 @@
+#!/bin/bash
+
+IS_PARENT=`scantek-config is-parent`
+
+# Diagnostics wrapper script
+if [[ "$#" -eq 0 || "$1" == '--help' || "$1" == '-?' ]]; then
+  echo "Usage: scantek diag [TYPE].."
+  echo
+  echo "Diagnostic types available:"
+  echo "  touchscreen               Checks to see if the touchscreen is disconnected"
+  echo "  services                  Checks to see if the required native services are running"
+  echo "  temp                      Displays the temperature of the CPU cores"
+  echo
+  exit
+fi
+
+function do_touchscreen_diag() {
+  if [[ "$IS_PARENT" -eq 1 ]]; then
+    echo "This unit is a parent - skipping touchscreen tests"
+    exit
+  fi
+
+  # Check to see if X thinks it's connected
+  CONNECTED_SCREEN="$(DISPLAY=:0 xrandr -q --verbose | grep ' connected' | cut -d ' ' -f 1 | head -n 1)"
+  if [[ "$CONNECTED_SCREEN" == "" ]]; then
+    echo "error: Display does not appear to be connected at all." >&2
+    exit -1
+  fi
+
+  case "$CONNECTED_SCREEN" in
+    "DP" | "DP1" | "DP2" | "DP3")
+      echo "Touchscreen is connected via DisplayPort"
+      ;;
+
+    "HDMI" | "HDMI1" | "HDMI2")
+      echo "Touchscreen is connected via HDMI"
+      ;;
+
+    "VGA" | "VGA1" | "VGA2")
+      echo "Touchscreen is connected via VGA"
+      ;;
+
+    *)
+      echo "Touchscreen is connected via unknown interface $CONNECTED_SCREEN"
+      ;;
+  esac
+
+  # Check to see if it shows up as a HID device
+  TOUCHSCREEN_HID_EXISTS="$(udevadm info --export-db|grep ID_INPUT_TOUCHSCREEN=1)"
+  if [[ -z "$TOUCHSCREEN_HID_EXISTS" ]]; then
+    echo "error: Touchscreen input device is not detected." >&2
+    exit -1
+  else
+    echo "Touchscreen input device is detected."
+  fi
+
+  exit
+}
+
+function do_services_diag() {
+  ST_V5_PID="$(pgrep st_v5.out)"
+  FACEDETECT_PID="$(pgrep facedetect)"
+  IDSERVER_PID="$(pgrep bin.idserver)"
+  MYSQL_PID="$(pgrep mysqld)"
+  APACHE_PID="$(pgrep apache2)"
+
+  if [[ -z "$MYSQL_PID" ]]; then
+    echo "error: MySQL does not appear to be running" >&2
+    exit -1
+  fi
+
+  if [[ -z "$APACHE_PID" ]]; then
+    echo "error: Apache does not appear to be running" >&2
+    exit -1
+  fi
+
+  if [[ "$IS_PARENT" -eq 0 ]]; then
+    if [[ -z "$IDSERVER_PID" ]]; then
+      echo "error: idserver does not appear to be running" >&2
+      exit -1
+    fi
+
+    USE_CAMERA="$(scantek-config use-camera)"
+    if [[ -z "$FACEDETECT_PID" && "$USE_CAMERA" -eq 1 ]]; then
+      echo "error: facedetect does not appear to be running" >&2
+      exit -1
+    fi
+  fi
+
+  exit
+}
+
+function do_temp_diag() {
+  # do some magic with the stuff in /sys to fetch temperatures so we don't need
+  # to install lm_sensors on everything.
+
+  exit
+}
+
+while [[ ! -z "$1" ]]; do
+  case "$1" in
+    touchscreen)
+      do_touchscreen_diag $*
+      ;;
+
+    services)
+      do_services_diag $*
+      ;;
+
+    temp)
+      do_temp_diag $*
+      ;;
+
+    *)
+      echo >&2
+      echo "Unknown command $1" >&2
+      exit -1
+      ;;
+  esac
+  shift
+done

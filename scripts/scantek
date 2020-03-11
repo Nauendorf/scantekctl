@@ -1,0 +1,36 @@
+#!/bin/bash
+
+if [[ $# -eq 0 || "$1" == "--help" || "$1" == "-?" || "$1" == "-h" ]]; then
+  echo "Usage: scantek [command] [options]"
+  echo
+  echo "Available commands:"
+  echo "  config                Outputs current configuration settings"
+  echo "  diag                  Diagnostic commands"
+  echo "  version               Outputs the version of the Scantek software on this device"
+  scantek-command --list-command-help
+  exit
+fi
+
+# Master script to launch other management/diagnostic scripts
+while [[ ! -z "$1" ]]; do
+    case "$1" in
+        config)
+            shift
+            scantek-config $*
+            exit
+            ;;
+        diag)
+            shift
+            scantek-diag $*
+            exit;;
+        version)
+            shift
+            scantek-version $*
+            exit;;
+        *)
+            scantek-command $*
+            exit
+            ;;
+    esac
+    shift
+done

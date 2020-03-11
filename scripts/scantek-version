@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [[ "$1" == '--help' ]]; then
+  echo "scantek-version"
+  echo
+  echo "Prints the version of the Scantek software installed on this device."
+  echo
+  echo "Options:"
+  echo "  --major     Only prints the major version number (13, 14, 15)"
+  
+  exit
+fi
+
+VERSION="not-installed"
+
+# Gets the version of the Scantek software installed on this OS, if any
+if [[ -e /var/www/includes/venueInfo.php ]]; then
+  # 14 or below
+  VERSION=`php -r 'require_once "/var/www/includes/venueInfo.php"; echo $version;'`
+elif [[ -e /opt/scantech/includes/venueInfo.php ]]; then
+  # 15 or above
+  VERSION=`php -r 'require_once "/opt/scantech/includes/venueInfo.php"; echo $version;'`
+fi
+
+if [[ $VERSION == 'not-installed' ]]; then
+  # return an error if there was no known version installed
+  exit -1
+fi
+
+# only print major/minor if requested
+if [[ "$#" -lt 1 ]]; then
+  echo $VERSION
+  exit
+elif [[ "$1" == '--major' ]]; then
+  MAJOR=`echo $VERSION|cut -d '.' -f 1`
+  echo $MAJOR
+  exit
+fi

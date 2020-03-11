@@ -1,0 +1,183 @@
+#!/bin/bash
+
+if [[ "$#" -eq 0 || "$1" == '--help' ]]; then
+  echo "Usage: scantek-config [OPTION]... [ITEM]..."
+  echo "Prints one or more configuration options from the Scantek venue configuration for this device."
+  echo
+  echo "Options:"
+  echo " --help               This usage information"
+  echo
+  echo "Output modifiers (mutually exclusive, must be first option):"
+  echo " -h, --human-readable Print the name of the item and then the value."
+  echo "                      Default behaviour if multiple items are specified"
+  echo "                      unless --json is specified"
+  echo " --json               Output parseable JSON instead"
+  echo " -r, --raw            Print the value of the item only. Default behaviour if"
+  echo "                      one item is specified. May only output one item."
+  echo
+  echo "Configuration items:"
+  echo "unit-id               The unit's ID"
+  echo "venue-id              The venue's ID"
+  echo "venue-name            The venue's name"
+  echo "manual-trigger        Whether or not manual trigger is enabled"
+  echo "is-parent             Whether or not this is a parent"
+  echo "is-qld                Whether or not this device is part of the QLD SNOP system"  
+  echo
+  exit
+fi
+
+# Config option wrapper script
+VERSION=`scantek-version --major`
+VENUEINFO=
+if [[ "$VERSION" == '14' ]]; then
+  VENUEINFO=/var/www/includes/venueInfo.php
+elif [[ "$VERSION" == '15' ]]; then
+  VENUEINFO=/opt/scantech/includes/venueInfo.php
+fi
+
+RAWONLY=1
+HUMAN_READABLE=0
+JSON=0
+
+# Default to human readable if more than one option is specified
+if [[ "$#" -gt 1 ]]; then
+  HUMAN_READABLE=1
+  RAWONLY=0
+  JSON=0
+fi
+
+while [[ ! -z "$1" ]]; do
+    case "$1" in
+        "-h" | "--human-readable")
+            HUMAN_READABLE=1
+            JSON=0
+            shift
+            break
+            ;;
+
+        "-j" | "--json")
+            HUMAN_READABLE=0
+            JSON=1
+            echo -n "{"
+            shift
+            break
+            ;;
+
+        "-r" | "--raw")
+            HUMAN_READABLE=0
+            JSON=0
+            RAWONLY=1
+            shift
+            break
+            ;;
+
+        "--")
+            shift
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+    shift
+done
+
+if [[ $RAWONLY -eq 1 && $# -gt 1 ]]; then
+  echo "error: Must use output other than --raw when specifying multiple variables to print!" >&2
+  exit -1
+fi
+
+function emit_var() {
+  JSONNAME="$1"
+  DESCRIPTION="$2"
+  REMAINDER="$3"
+  RAW="$4"
+
+  if [[ $HUMAN_READABLE -eq 1 ]]; then
+    echo $DESCRIPTION: $RAW
+  elif [[ $JSON -eq 1 ]]; then
+    ESCAPED=`echo $RAW|sed -e 's/"/\\"/g'`
+    echo -n '"'$JSONNAME'": "'$ESCAPED'"'
+    if [[ $REMAINDER -gt 1 ]]; then echo -n ', '; fi
+  else 
+    echo $RAW
+  fi
+}
+
+function load_var() {
+  VARNAME=$1
+  RAW=`php -r 'require_once "'$VENUEINFO'"; echo $'$VARNAME' . "\n";' 2>/dev/null`
+  echo $RAW
+}
+
+### 
+# Pass in the venueInfo.php variable name, then the output JSON name,
+# then the user-friendly description, then $# as the fourth argument
+# (used to emit a comma after the JSON if there are more items
+# to print)
+function load_emit_var() {
+  VARNAME="$1"
+  JSONNAME="$2"
+  DESCRIPTION="$3"
+  REMAINDER="$4"
+  RAW="$(load_var $VARNAME)"
+
+  emit_var "$JSONNAME" "$DESCRIPTION" "$REMAINDER" "$RAW"
+}
+
+while [[ ! -z "$1" ]]; do
+    case "$1" in
+        "-r" | "--raw" | "-h" | "--human-readable" | "--json")
+            echo >&2
+            echo "error: Only one modifier allowed and it must be the first option" >&2
+            exit -1
+            ;;
+
+        "-u" | "--unit-id" | "unit-id")
+            load_emit_var "unitID" "unit_id" "Unit ID" $#
+            ;;
+        "-v" | "--venue-id" | "venue-id")
+            load_emit_var "vID" "venue_id" "Venue ID" $#
+            ;;
+        "-n" | "--venue_name" | "venue-name")
+            load_emit_var "vName" "venue_name" "Venue Name" $#
+            ;;
+        "--manual_trigger_enabled" | "manual-trigger-enabled" | "manual-trigger")
+            load_emit_var "manualDocTrigger" "manual_trigger" "Manual Trigger" $#
+            ;;
+        "--is-parent" | "is-parent")
+            DB_ADDRESS="$(load_var dbAddress)"
+            RAW=0
+            if [[ "$DB_ADDRESS" == "localhost" ]]; then
+              RAW=1
+            fi
+
+            emit_var "is_parent" "Is Parent" $# $RAW
+            ;;
+
+        "--is-qld" | "is-qld")
+            VENUE_ID="$(load_var vID)"
+            RAW=0
+            if [[ "$VENUE_ID" =~ ^50[0-9][0-9][0-9] ]]; then
+              RAW=1
+            fi
+
+            emit_var "is_qld" "Is QLD SNOP device" $# $RAW
+            ;;
+
+        "--use-camera" | "use-camera")
+            load_emit_var "useCamera" "use_camera" "Use Camera" $#
+            ;;
+            
+        *)
+            echo >&2
+            echo "Unrecognised option $1" >&2
+            exit -1
+            ;;
+    esac
+    shift
+done
+
+if [[ $JSON -eq 1 ]]; then
+  echo "}"
+fi

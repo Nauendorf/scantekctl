@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Scantek CLI installer builder
+rm -f payload.tar payload.tar.gz files.tar
+
+COPYFILE_DISABLE=1 tar cf files.tar scantek scantek-command scantek-config scantek-diag scantek-version
+COPYFILE_DISABLE=1 tar cf payload.tar install files.tar
+
+if [ -e "payload.tar" ]; then
+    gzip payload.tar
+
+    if [ -e "payload.tar.gz" ]; then
+        cat decompress payload.tar.gz > scantek-cli-installer.sh
+    else
+        echo "payload.tar.gz does not exist"
+        exit 1
+    fi
+else
+    echo "payload.tar does not exist"
+    exit 1
+fi
+
+echo "scantek-cli-installer.sh created"
+
+echo "cleaning up"
+rm -f payload.tar payload.tar.gz files.tar
+
+exit 0

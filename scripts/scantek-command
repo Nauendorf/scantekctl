@@ -1,0 +1,112 @@
+#!/bin/bash
+
+# Wrapper script to run useful commands
+VERSION=`scantek-version --major`
+IS_PARENT=`scantek-config is-parent`
+
+# Main help
+if [[ $# -eq 0 ]]; then
+  echo "Usage: scantek-command [command] [options]"
+  echo
+  echo "Available commands: "
+fi
+
+# Help, integrated into the main 'scantek' command output
+if [[ $# -eq 0 || "$1" == "--list-command-help" ]]; then
+  echo "  trigger               manually trigger a scan"
+  echo "  ban-sync              manually sync bans to this device"
+  exit
+fi
+
+# manual scan trigger
+function do_trigger() {
+  if [[ "$2" == "--help" || "$2" == "-?" ]]; then
+    echo "Usage: scantek trigger [--force]"
+    echo
+    echo "Manually triggers a scan, if allowed by the venue configuration."
+    echo "Use --force to trigger even if manual trigger is disabled in venue config."
+    exit
+  fi
+
+  HAS_MANUAL_TRIGGER=`scantek-config manual-trigger`
+  if [[ $HAS_MANUAL_TRIGGER -eq 0 && "$2" != "--force" ]]; then
+    echo "error: Manual trigger is not currently enabled for this unit" >&2
+    echo "       Try again with --force if you really want to do this." >&2
+    exit -1
+  fi
+  if [[ $IS_PARENT -eq 1 ]]; then
+    echo "error: This unit is a parent - manually scanning will do nothing" >&2
+    exit -1
+  fi
+  if [[ ! -e /var/www/manual_trigger.txt ]]; then
+    echo "warning: manual trigger file does not exist, creating" >&2
+  fi
+
+  echo 1 > /var/www/manual_trigger.txt
+  echo "Manually triggering a scan."
+  exit
+}
+
+# QLD SNOP ban sync
+function do_ban_sync() {
+  if [[ "$2" == "--help" || "$2" == "-?" ]]; then
+    echo "Usage: scantek ban-sync"
+    echo
+    echo "Forces a ban sync."
+    exit
+  fi
+
+  IS_QLD=`scantek-config is-qld`
+  if [[ "$IS_QLD" -eq 0 ]]; then
+    echo "error: ban sync currently only available on QLD SNOP units" >&2
+    exit -1
+  fi
+
+  if [[ "$VERSION" -eq 15 ]]; then
+    if [[ "$IS_PARENT" -eq 0 ]]; then
+      RUNNING_SYNC=`pgrep -c banFetchChild.php`
+      echo "Triggering child ban update.."
+      sudo sh -c 'echo "-1" > /tmp/ramdrv/banUpdate.lock'
+    else
+      RUNNING_SYNC=`pgrep -c getBans.php`
+      if [[ "$RUNNING_SYNC" -gt 0 && "$2" == "--force" ]]; then
+        echo "Killing existing ban sync process.."
+        sudo sh -c 'pgrep -f getBans.php | xargs kill -9'
+        echo "Sleeping for a moment.."
+        sleep 1
+      else 
+        echo "error: getBans.php is currently running. Please run again with --force to kill and restart the ban fetch." >&2
+        exit -1
+      fi
+
+      echo "Running ban sync with --force, tee'ing output to stdout and log file.."
+      echo "Wait for the sync to finish, or abort with Ctrl-C and it will continue when"
+      echo "cron restarts it."
+      sudo sh -c 'php /opt/scantech/scripts_root/getBans.php --force | tee -a /var/log/scantek/banFetch.log'
+      exit
+    fi
+  else
+    echo "error: Unsupported operation at present" >&2
+    exit -1
+  fi
+  exit
+}
+
+while [[ ! -z "$1" ]]; do
+  case "$1" in
+    trigger)
+      do_trigger $*
+      ;;
+
+    ban-sync)
+      do_ban_sync $*
+      ;;
+
+    *)
+      echo >&2
+      echo "Unknown command $1" >&2
+      exit -1
+      ;;
+  esac
+  shift
+done

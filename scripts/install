@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Install the files
+mkdir -p /opt/scantek-cli
+tar xvf ./files.tar -C /opt/scantek-cli/
+
+# Set up symbolic links to the scripts
+# Remove the existing one
+rm -f /usr/bin/scantek
+ln -s /opt/scantek-cli/scantek /usr/bin/scantek
+
+# Install a link for each script into /usr/bin
+find /opt/scantek-cli/ -type f -executable -name "scantek-*" -exec sh -c 'echo linking `basename {}` && rm -f /usr/bin/`basename {}` && ln -s {} /usr/bin/' \;

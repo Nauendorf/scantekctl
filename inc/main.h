@@ -7,12 +7,8 @@
 */
 
 // Library includes
-
-
-// Project includes
-#include "../inc/common.h"
-#include "../inc/class.id.h"
-#include "../inc/argParse.h"
+#include "argParse.h"
+#include "IDocument.h"
 
 // Const defines
 const char* helpOutput = "\e[39mVersion:  1.0.0 \
@@ -22,3 +18,4 @@ const char* helpOutput = "\e[39mVersion:  1.0.0 \
   -s,     Make self executable  (optional)\n \
   -l,     Specify symLink path (optional);\n \
           default is /usr/bin\n";
+

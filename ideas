@@ -1,4 +1,6 @@
 turn of monitor
+xset dpms force off
+
 check scan layer (uv or ir brightness)
 run scan images against idserver
 reproduce interface result from sql results table
@@ -7,3 +9,47 @@ get unsynced scans from IST
 generic troubleshooting tools?
 change camera brightness
 change monitor brightness
+get scanner details (serial number etc..)
+remove images older than ...X
+mysqlcheck / myisamcheck
+mysql backup
+
+
+
+Camra brightness
+# To install
+sudo apt-get install v4l-utils
+# To get current brightness value (default is 128)
+v4l2-ctl --get-ctrl=brightness
+# To set brightness level
+v4l2-ctl --set-ctrl brightness=200
+
+Monitor brightness
+xrandr | grep " connected" | cut -f1 -d " "
+xrandr --output HDMI-A-1 --brightness .9
+
+
+
+scantekctl
+    help
+    network
+        ipconflicts
+        find-unit
+    idserver
+        restart
+        stop
+        start
+        status
+        re-scan
+    scan
+        reproduce-result
+        image-brightness
+        results
+    unit
+        monitor-brightness
+        camera-brightness
+        info
+    db
+        unsynched-scans
+        migrate-LVH
+

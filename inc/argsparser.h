@@ -16,6 +16,7 @@ class ArgsParse
     void                    addParameter            (std::string name, T paramType);
     void                    addParameterSet         (std::string name, std::string setName);
     void                    removeParameter         (std::string name);
+    std::string             GenerateHelpMsg         ();
 
     std::map
     <std::string,
@@ -23,11 +24,13 @@ class ArgsParse
 
     // Const defines
     const char* helpOutput = "\e[39mVersion:  1.0.0 \
-    \nUsage:    MakeExec -i <script file>  ||  MakeExec -s  ||  MakeExec -i <script file> -l <link path> \
-    \n\
-    -i,     Input file to make executable\n \
-    -s,     Make self executable  (optional)\n \
-    -l,     Specify symLink path (optional);\n \
-            default is /usr/bin\n";
+    \nUsage:    scantekctl     <option>    <action>            <action args>\n\
+          scantekctl       unit      monitor-brightness       .9\n\n\
+    help:                                                    \n\
+    network:    ipconflicts; find-unit                       \n\
+    idserver:   restart; stop; start; status; re-scan        \n\
+    scan:       reproduce-result; image-brightness; results  \n\
+    unit:       monitor-brightness; camera-brightness; info  \n\
+    db:         unsynched-scans; migrate-LVH                 \n";
 
 };

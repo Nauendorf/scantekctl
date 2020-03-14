@@ -10,7 +10,6 @@ class Configure
     public:
                             Configure                   ();
                             ~Configure                  ();
-
     std::map
     <std::string,
     std::string>            Initialize                  ();

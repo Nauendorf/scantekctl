@@ -1,4 +1,4 @@
-#include "IDocument.h"
+#include "idocument.h"
 
 IDocument::IDocument(char * meow)
 {
@@ -18,6 +18,7 @@ cv::Rect IDocument::getFrame(cv::MatSize imageSize, float p)
     float padLeft   = width * p;
     float newHeight = height - (padTop * 2);
     float newWidth  = width - (padLeft * 2);
+    
     cv::Rect frameRect(padTop, padLeft, newWidth, newHeight);
     return frameRect;
 }  

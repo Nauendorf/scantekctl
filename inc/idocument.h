@@ -6,8 +6,8 @@
 #include "common.h"
 
 // Prototypes
-class IDocument{
-
+class IDocument
+{
     public:
                     IDocument               (char * meow);
                     ~IDocument              ();

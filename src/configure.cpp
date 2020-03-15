@@ -34,3 +34,5 @@ std::map<std::string,std::string> Configure::Initialize()
     std::map<std::string,std::string> test; 
     return test; 
 }
+
+

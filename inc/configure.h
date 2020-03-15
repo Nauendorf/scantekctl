@@ -14,5 +14,6 @@ class Configure
     <std::string,
     std::string>            Initialize                  ();
     void                    CreateDefaultConfig         ();
+    int test();
 
 };

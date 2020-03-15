@@ -1,5 +1,6 @@
 #include "argsparser.h"
 
+
 ArgsParse::ArgsParse(int argc, char*argv[])
 {
     ArgsParse::parseArgs(argc, argv);
@@ -19,8 +20,8 @@ std::map<std::string,std::string> ArgsParse::parseArgs(int argc, char* argv[])
 {
     //std::cout << argc << "\n";
     std::string helpOpts[3] = {"help","-h","--help"};
-    if ( ( argc == 1 ) || /* if scantekctl is run without an argument or*/
-    /* if help is given as the only argument*/
+    if ( ( argc == 1 ) || /* if scantekctl is run without an argument or
+    if help is given as the only argument*/
     (std::find(std::begin(helpOpts), std::end(helpOpts), (argv)[1]) != std::end(helpOpts) && argc == 2) )
     {
         std::cout << helpOutput << "\n";

@@ -5,6 +5,9 @@
 // Project includes
 #include "common.h"
 
+// 3rd Party Includes
+#include <nlohmann/json.hpp>
+
 class Configure
 {
     public:
@@ -15,5 +18,17 @@ class Configure
     std::string>            Initialize                  ();
     void                    CreateDefaultConfig         ();
     int test();
+
+    // /etc/scantekctl/scantekctl.json
+
+    std::string scriptsRoot;
+    std::string scriptHash;
+    std::string scriptName;
+    std::string scriptDescription;
+
+
+
+
+
 
 };

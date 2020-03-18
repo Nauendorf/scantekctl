@@ -26,7 +26,6 @@ class ArgsParse
     const char* helpOutput = "\e[39mVersion:  1.0.0 \
     \nUsage:    scantekctl     <option>    <action>            <action args>\n\
           scantekctl       unit      monitor-brightness       .9\n\n\
-                                                             \n\
     network:    ipconflicts; find-unit                       \n\
     idserver:   restart; stop; start; status; re-scan        \n\
     scan:       reproduce-result; image-brightness; results  \n\

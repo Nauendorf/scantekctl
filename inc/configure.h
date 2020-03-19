@@ -15,19 +15,21 @@ class Configure
                             ~Configure                  ();
 
     void                    CreateDefaultConfig         ();
-    int test();
+    void                    LoadModules                 ();
 
-    // 
-    std::string scriptsRoot;
+    // Modules in /etc/scantekctl/scantekctl.mod.json
+    std::string scriptPath;
     std::string scriptHash;
     std::string scriptName;
     std::string scriptDescription;
 
     // Default config in /etc/scantekctl/scantekctl.json
-    nlohmann::json j;
+
+
+
+    nlohmann::json dConf;  // Default config json object
     std::ifstream s;
     std::string line;
-
 
     private:
 

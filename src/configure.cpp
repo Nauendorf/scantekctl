@@ -1,54 +1,75 @@
 #include "configure.h"
  
-Configure::Configure()
+Config::Config()
 {
+    Config::Read();
+}
 
-    Configure::Initialize();
+Config::~Config()
+{
 
 }
 
-Configure::~Configure()
+std::map<std::string,std::string> Config::Read()
 {
+    try {
 
-}
+        is.open("/etc/scantekctl.conf");
+        if (is.is_open()) 
+        {
+            while (std::getline(is, il))
+            {
+                int num = il.find('=');
 
-std::map<std::string,std::string> Configure::Initialize()
-{
-    // read a JSON file
-    //std::ifstream i("file.json");
-    //i >> j;
+            }
 
-    s.open("/etc/scantekctl.conf");
-    if (s.fail());
-    {
-        // Create default config file
-    }
+             
+        }
+        else 
+        {
+            Config::CreateDefaultConfig(); 
+        }   
 
-    std::map<std::string,std::string> test; 
-    return test; 
+    } catch ( std::ifstream::failure e ) {
+        throw "Unable to read configuration file at /etc/scantekctl.conf"; }
+    
+    return dConf;
 }
 
 // Ddefauly configurations are written if for some reason they do not exist
-void Configure::CreateDefaultConfig()
+void Config::CreateDefaultConfig()
 {
+    // Default configs for scantekctl
+    std::string Module_Config = "scantekctl.json";
+    std::string ctl_Config    = "scantekctl.conf";
+    std::string Module_Root   = "/opt/scantekctl/modules";
 
-    dConf["Module_Root"] = "/op/scantekctl/modules";
-    dConf["Config_Root"] = "/etc/scantekctl";
-
-
-    // write prettified JSON to another file
-    std::ofstream o("pretty.json");
-    o << std::setw(4) << dConf << std::endl;
+    os << Module_Config;
+    os << ctl_Config;   
+    os << Module_Root;  
+    os << Config_Root;    
 
     return;
 }
 
-void Configure::LoadModules()
+// Loops through Module_Root 
+void Config::LoadModules()
 {
     // TO DO:
     // Loop through Module_Root for script files
     // Compare each with scantekctl.mod.json
     // If the module does not yet exist then create an entry then create a symlink in /usr/bin
+    mConf["scriptPath"];       
+    mConf["scriptHash"];       
+    mConf["scriptName"];       
+    mConf["scriptDescription"];
+
+    // read a JSON file
+    //std::ifstream i("file.json");
+    //i >> j;
+
+    std::ofstream ctl_o(mConf["ctl_Config"]);
+    ctl_o << std::setw(4) << mConf << std::endl;
 
 }
 

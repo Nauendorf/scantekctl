@@ -8,36 +8,43 @@
 // 3rd Party Includes
 #include <nlohmann/json.hpp>
 
-class Configure
+class Config
 {
     public:
-                            Configure                   ();
-                            ~Configure                  ();
+                                Config                      ();
+                                ~Config                     ();
 
-    void                    CreateDefaultConfig         ();
-    void                    LoadModules                 ();
+        void                    CreateDefaultConfig         ();
+        void                    LoadModules                 ();
+        std::map    
+        <std::string,   
+        std::string>            Read                        ();
 
-    // Modules in /etc/scantekctl/scantekctl.mod.json
-    std::string scriptPath;
-    std::string scriptHash;
-    std::string scriptName;
-    std::string scriptDescription;
+        // Modules in /etc/scantekctl/scantekctl.json
+        // Default config in /etc/scantekctl/scantekctl.conf
 
-    // Default config in /etc/scantekctl/scantekctl.json
+        // Read()
+        std::ifstream is; 
+        std::string il;
+
+        // CreateDefaultConfig()
+        std::map<std::string,std::string> dConf;  // Default config map
+        std::ofstream os; 
+        std::string ol;
+
+        // Default configs for scantekctl
+        std::string Module_Config;
+        std::string ctl_Config;
+        std::string Module_Root;
+        std::string Config_Root;
+
+        // LoadModules()
+        nlohmann::json mConf;  // Module config json object
+    
 
 
-
-    nlohmann::json dConf;  // Default config json object
-    std::ifstream s;
-    std::string line;
 
     private:
-
-    std::map
-    <std::string,
-    std::string>            Initialize                  ();
-
-
 
 
 };

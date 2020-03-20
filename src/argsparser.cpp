@@ -1,6 +1,5 @@
 #include "argsparser.h"
 
-
 ArgsParse::ArgsParse(int argc, char*argv[])
 {
     ArgsParse::parseArgs(argc, argv);

@@ -5,17 +5,14 @@
 // Standard includes
 #include "common.h"
 
-// 3rd Party Includes
-#include <nlohmann/json.hpp>
-
 class Config
 {
     public:
                                 Config                      ();
                                 ~Config                     ();
 
+        void                    Initialize                  ();
         void                    CreateDefaultConfig         ();
-        void                    LoadModules                 ();
         std::map    
         <std::string,   
         std::string>            Read                        ();
@@ -23,26 +20,24 @@ class Config
         // Modules in /etc/scantekctl/scantekctl.json
         // Default config in /etc/scantekctl/scantekctl.conf
 
-        // Read()
-        std::ifstream is; 
-        std::string il;
-
-        // CreateDefaultConfig()
-        std::map<std::string,std::string> dConf;  // Default config map
-        std::ofstream os; 
-        std::string ol;
+        // CreateDefaultConfig()  
+        std::ofstream os;                         // Output stream
 
         // Default configs for scantekctl
-        std::string Module_Config;
-        std::string ctl_Config;
-        std::string Module_Root;
-        std::string Config_Root;
+        const char * conf_dir  = "/etc/scantekctl/";
+        const char * conf_path = "/etc/scantekctl/scantekctl.conf";
+                
+        std::string module_config = "scantekctl.json\n";
+        std::string ctl_config    = "scantekctl.conf\n";
+        std::string module_root   = "/opt/scantekctl/modules/\n";
+        std::string bin_path      = "/usr/bin/\n"; 
 
-        // LoadModules()
-        nlohmann::json mConf;  // Module config json object
-    
-
-
+        // Read()
+        std::map<std::string,std::string> ctlConf;  // Default config map
+        std::ifstream is; 
+        std::string il;
+        std::string key;
+        std::string value;
 
     private:
 

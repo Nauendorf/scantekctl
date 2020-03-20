@@ -32,7 +32,6 @@ std::map<std::string,std::string> Config::Read()
             while ( std::getline(is, il) )
             {
                 int num = il.find('=');
-
                 if ( num != -1 )
                 {
                     key = il.substr(0, num);
@@ -51,14 +50,13 @@ std::map<std::string,std::string> Config::Read()
 
 void Config::CreateDefaultConfig()
 {
-
     os.open( conf_path, std::ios::out | std::ios::app );  
     if ( os.is_open() ) 
     {
-        os << "module_config=" << Config::module_config;
-        os << "ctl_config=" << Config::ctl_config;   
-        os << "module_root=" << Config::module_root;  
-        os << "bin_path=" << Config::bin_path;    
+        os << "module_config=" << Config::module_config << "\n";
+        os << "ctl_config="    << Config::ctl_config    << "\n";   
+        os << "module_root="   << Config::module_root   << "\n";  
+        os << "bin_path="      << Config::bin_path      << "\n";    
         os.close();
     }
 

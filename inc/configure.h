@@ -21,23 +21,23 @@ class Config
         // Default config in /etc/scantekctl/scantekctl.conf
 
         // CreateDefaultConfig()  
-        std::ofstream os;                         // Output stream
-
+        std::ofstream os;  // Output stream
         // Default configs for scantekctl
-        const char * conf_dir  = "/etc/scantekctl/";
-        const char * conf_path = "/etc/scantekctl/scantekctl.conf";
-                
-        std::string module_config = "scantekctl.json\n";
-        std::string ctl_config    = "scantekctl.conf\n";
-        std::string module_root   = "/opt/scantekctl/modules/\n";
-        std::string bin_path      = "/usr/bin/\n"; 
+        const char * conf_dir      = "/etc/scantekctl/";
+        const char * conf_path     = "/etc/scantekctl/scantekctl.conf";  
+        const char * module_root   = "/opt/scantekctl/modules/";          
+        const char * module_config = "scantekctl.json";
+        const char * ctl_config    = "scantekctl.conf";
+        const char * bin_path      = "/usr/bin/";  // Store symlinks here
 
         // Read()
-        std::map<std::string,std::string> ctlConf;  // Default config map
-        std::ifstream is; 
-        std::string il;
-        std::string key;
-        std::string value;
+        std::map
+        <std::string,
+        std::string>    ctlConf;  // Default config map
+        std::ifstream   is; 
+        std::string     il;
+        std::string     key;
+        std::string     value;
 
     private:
 

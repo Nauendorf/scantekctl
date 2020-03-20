@@ -1,0 +1,33 @@
+#!/bin/bash
+
+function install() {
+
+    if [ "$EUID" -ne 0 ]
+    then echo -e "\e[31mPermission denied: try sudo"
+    exit
+    fi
+
+    echo -e "\e[32mInstalling..."
+    config="/etc/scantekctl"
+    opt="/opt/scantekctl"
+    mods="/opt/scantekctl/modules"
+
+    g++ ./src/*.cpp -o ./bin/scantekctl -I ./inc/ `pkg-config --cflags --libs opencv`
+    [[ $? -eq 0 ]] || {
+        echo -e "\e[31mCompilation error"
+        exit 1
+    }
+
+    [[ ! -d $config ]] && mkdir $config
+    [[ ! -d $opt ]] && mkdir $opt
+    [[ ! -d $mods ]] && mkdir $mods
+    cp $(pwd)/bin/scantekctl /opt/scantekctl
+    ln -s $opt/scantekctl /usr/bin/scantekctl 2>/dev/null
+    [[ $? -eq 0 ]] || {
+        echo -e "\e[31mFailed to create symlink. Maybe it already exists?"
+        exit 1
+    }
+    echo -e "\e[32mSuccess!!"
+}
+
+install

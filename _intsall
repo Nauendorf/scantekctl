@@ -11,6 +11,7 @@ function install() {
     config="/etc/scantekctl"
     opt="/opt/scantekctl"
     mods="/opt/scantekctl/modules"
+    bin="/usr/bin/scantekctl"
 
     g++ ./src/*.cpp -o ./bin/scantekctl -I ./inc/ `pkg-config --cflags --libs opencv`
     [[ $? -eq 0 ]] || {
@@ -18,16 +19,10 @@ function install() {
         exit 1
     }
 
-    [[ ! -d $config ]] && mkdir $config
-    [[ ! -d $opt ]] && mkdir $opt
-    [[ ! -d $mods ]] && mkdir $mods
-    cp $(pwd)/bin/scantekctl /opt/scantekctl
-    ln -s $opt/scantekctl /usr/bin/scantekctl 2>/dev/null
-    [[ $? -eq 0 ]] || {
-        echo -e "\e[31mFailed to create symlink. Maybe it already exists?"
-        exit 1
-    }
-    echo -e "\e[32mSuccess!!"
+    [[ ! -d $config ]] && mkdir $config; [[ ! -d $opt ]] && mkdir $opt; [[ ! -d $mods ]] && mkdir $mods
+    cp "$(pwd)/bin/scantekctl" $opt
+    ([[ -f $bin ]] && echo -e "\e[31mAlready installed.") || \
+    (ln -s $opt/scantekctl $bin 2>/dev/null && echo -e "\e[32mSuccess!!")
 }
 
 install

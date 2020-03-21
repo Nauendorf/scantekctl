@@ -62,5 +62,3 @@ void Config::CreateDefaultConfig()
 
     return;
 }
- 
-

@@ -7,6 +7,8 @@
 
 class Config
 {
+    typedef std::map<std::string,std::string> configMap;
+
     public:
                                 Config                      ();
                                 ~Config                     ();
@@ -31,9 +33,7 @@ class Config
         const char * bin_path      = "/usr/bin/";  // Store symlinks here
 
         // Read()
-        std::map
-        <std::string,
-        std::string>    ctlConf;  // Default config map
+        configMap       ctlConf;  // Default config map
         std::ifstream   is; 
         std::string     il;
         std::string     key;

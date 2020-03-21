@@ -8,6 +8,6 @@
 
 #include "argsparser.h"
 #include "configure.h"
-
+#include "module.h"
 
 

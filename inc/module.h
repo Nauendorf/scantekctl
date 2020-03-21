@@ -15,8 +15,10 @@ class Module
                             Module              ();
                             ~Module             ();
 
-        void                Execute             ();
+        Module              GetModule           ();
         void                LoadModules         ();
+        void                Execute             ();
+        static void         read_directory      (const std::string& name);
 
 
         // LoadModules()

@@ -74,6 +74,9 @@
         "slist": "cpp",
         "future": "cpp",
         "cfenv": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "any": "cpp",
+        "rope": "cpp",
+        "scoped_allocator": "cpp"
     }
 }

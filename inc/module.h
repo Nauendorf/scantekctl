@@ -12,13 +12,13 @@
 class Module
 {
     public:
-                            Module              ();
-                            ~Module             ();
-
-        Module              GetModule           ();
-        void                LoadModules         ();
-        void                Execute             ();
-        static void         read_directory      (const std::string& name);
+                                    Module                  ();
+                                    ~Module                 ();
+        
+        Module                      GetModule               ();
+        void                        LoadModules             ();
+        void                        Execute                 ();
+        std::vector<char*>          ReadDirectory           (const char * dirPath);
 
 
         // LoadModules()

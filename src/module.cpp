@@ -10,9 +10,27 @@ Module::~Module()
 
 }
 
-void Module::read_directory(const std::string& dir)
+std::vector<char*> Module::ReadDirectory(const char * dirPath)
 {
-
+    DIR *dir;
+    std::vector<char*> dirList;
+    struct dirent *ent;
+    try
+    {
+        if ((dir = opendir (dirPath)) != NULL) 
+        {
+            while ((ent = readdir (dir)) != NULL) 
+            {             
+                dirList.push_back(ent->d_name);
+            }               
+        } 
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
+    return dirList;
 }
 
 // Loops through Module_Root 

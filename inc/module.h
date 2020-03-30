@@ -1,6 +1,6 @@
 /*
     Creates instance of a Module and executes the Module based on args 
-    given by argsParser
+    given by parameterset
 */
 
 // Project includes
@@ -16,17 +16,22 @@ class Module
                                     ~Module                 ();
         
         Module                      GetModule               ();
-        void                        LoadModules             ();
+        void                        AddModules              ();
         void                        Execute                 ();
         std::vector<char*>          ReadDirectory           (const char * dirPath);
 
 
-        // LoadModules()
-        nlohmann::json mConf;  // Module config json object
-
+        // AddModules()   
+        char * scriptPath;
+        char * scriptHash;
+        char * scriptName;
+        char * scriptDescription;
+        char * scriptParams;
+         
 
     private:
-
+        nlohmann::json mConf;  // Module config json object
+        const char * module_config  = "/opt/scantekctl/modules/scantekctl.json";
 
 
 

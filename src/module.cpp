@@ -33,22 +33,30 @@ std::vector<char*> Module::ReadDirectory(const char * dirPath)
     return dirList;
 }
 
-// Loops through Module_Root 
-void Module::LoadModules()
+// Loops through Module_Root and creates an entry for any new scripts 
+void Module::AddModules()
 {
-    // TO DO:
+    
     // Loop through Module_Root for script files
+    Module mod = Module();
+    std::vector<char *> dirList = mod.ReadDirectory("/home/david");
+    for(std::vector<char *> :: iterator it = dirList.begin(); it != dirList.end(); ++it)
+    {
+        mod = GetModule();
+        if ( true )
+        {
+            // If the filename does not exist in module_config go ahead and obtain all necessary information about it
+            // Generate a json entry with the info
+            mConf["scriptPath"];       
+            mConf["scriptHash"];       
+            mConf["scriptName"];       
+            mConf["scriptDescription"];
+        }
 
 
-    // Compare each with scantekctl.json
-    // If the module does not yet exist then create an entry
-    mConf["scriptPath"];       
-    mConf["scriptHash"];       
-    mConf["scriptName"];       
-    mConf["scriptDescription"];
+    }
 
-
-
+    // Write it out to the config file
     std::ofstream o(mConf["ctl_Config"]);
     o << std::setw(4) << mConf << std::endl;
 

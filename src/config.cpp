@@ -1,4 +1,4 @@
-#include "configure.h"
+#include "config.h"
 
 Config::Config()
 {
@@ -50,15 +50,15 @@ std::map<std::string,std::string> Config::Read()
 
 void Config::CreateDefaultConfig()
 {
-    os.open( conf_path, std::ios::out | std::ios::app );  
-    if ( os.is_open() ) 
-    {
-        os << "module_config=" << Config::module_config << "\n";
-        os << "ctl_config="    << Config::ctl_config    << "\n";   
-        os << "module_root="   << Config::module_root   << "\n";  
-        os << "bin_path="      << Config::bin_path      << "\n";    
-        os.close();
-    }
+    //os.open( conf_path, std::ios::out | std::ios::app );  
+    //if ( os.is_open() ) 
+    //{
+    //    os << "module_config=" << Config::module_config << "\n";
+    //    os << "ctl_config="    << Config::ctl_config    << "\n";   
+    //    os << "module_root="   << Config::module_root   << "\n";  
+    //    os << "bin_path="      << Config::bin_path      << "\n";    
+    //    os.close();
+    //}
 
     return;
 }

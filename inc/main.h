@@ -6,8 +6,8 @@
              id classification and fake detection
 */
 
-#include "argsparser.h"
-#include "configure.h"
+#include "parameterset.h"
+#include "config.h"
 #include "module.h"
 
 

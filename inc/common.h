@@ -11,5 +11,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <algorithm>
+#include <vector>
 
 typedef std::map<std::string,std::string> MyMap;
+typedef std::vector<std::string> MyVec;

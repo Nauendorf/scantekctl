@@ -4,6 +4,8 @@
 
 // Project includes
 #include "common.h"
+
+// 3rd party includes
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 

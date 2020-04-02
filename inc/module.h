@@ -20,21 +20,16 @@ class Module
         void                        Execute                 ();
         std::vector<char*>          ReadDirectory           (const char * dirPath);
 
-
         // AddModules()   
         char * scriptPath;
         char * scriptHash;
         char * scriptName;
         char * scriptDescription;
-        char * scriptParams;
-         
+        char * scriptParams;  
 
     private:
         nlohmann::json mConf;  // Module config json object
         const char * module_config  = "/opt/scantekctl/modules/scantekctl.json";
-
-
-
 
 };
 

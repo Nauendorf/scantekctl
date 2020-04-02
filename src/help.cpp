@@ -33,8 +33,10 @@ db:         unsynched-scans; migrate-LVH                 \n";
         std::cout << helpOutput << "\n"; 
     }
     else if ( (argc % 2 ) != 0 )
-    {
-        std::cout << green << "Error: Unexpected argument" << "\n";
+    {     
+        Cout c;
+        c.O = "Error: Unexpected argument"; 
+        c.Out(c.O, c.red);
     }
 
     return helpOutput; 

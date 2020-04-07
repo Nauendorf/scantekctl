@@ -1,8 +1,8 @@
 #include "help.h"
 
-Help::Help()
+Help::Help(int argc, char* argv[])
 {
-
+    GenerateHelpMsg(argc, argv);
 }
 
 Help::~Help()
@@ -34,7 +34,7 @@ db:         unsynched-scans; migrate-LVH                 \n";
     }
     else if ( (argc % 2 ) != 0 )
     {     
-        Cout c;
+        Cout c = Cout();
         c.O = "Error: Unexpected argument"; 
         c.Out(c.O, c.red);
     }

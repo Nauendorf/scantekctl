@@ -9,9 +9,8 @@
 class Help
 {
     public:
-                                Help                        ();
+                                Help                        (int argc, char* argv[]);
                                 ~Help                       ();
-
 
         std::string             GenerateHelpMsg             (int argc, char* argv[]);
     

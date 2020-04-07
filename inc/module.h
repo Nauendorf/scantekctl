@@ -19,9 +19,11 @@ class Module
         void                        AddModules              ();
         void                        Execute                 ();
         std::vector<char*>          ReadDirectory           (const char * dirPath);
+        MyVecChar                   GenerateModuleID        (int length);
+        std::string md5_from_file(std::string path);
 
         // AddModules()   
-        char * scriptPath;
+        std::vector<char> moduleID;
         char * scriptHash;
         char * scriptName;
         char * scriptDescription;
@@ -29,7 +31,9 @@ class Module
 
     private:
         nlohmann::json mConf;  // Module config json object
-        const char * module_config  = "/opt/scantekctl/modules/scantekctl.json";
+        const char * module_path  = "/opt/scantekctl/mods/scantekctl.json";
+        const std::string charSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; 
+
 
 };
 

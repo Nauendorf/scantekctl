@@ -9,5 +9,4 @@
 #include "parameterset.h"
 #include "config.h"
 #include "module.h"
-
-
+#include "help.h"

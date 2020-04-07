@@ -4,15 +4,23 @@ int main(int argc, char*argv[])
 {
 
 
+    Help h(argc, argv);
 
-    ParameterSet ap = ParameterSet(argc, argv);
-    Help h;
-    h.GenerateHelpMsg(argc, argv);
-    Config cf;
+    Module mod;
+    int length = 10;
+    std::vector<char> str = mod.GenerateModuleID(20);
+    std::string s(str.begin(), str.end());
+    std::cout << s << "\n"; 
 
 
-    //ap.ParseArgs(argc, argv);
+    if(argc != 2) {
+        std::cerr<<"Must specify the file\n";
+        exit(-1);
+    }
+
+    std::cout<< mod.md5_from_file(argv[1])<<"  "<<argv[1]<<std::endl;
+    return 0;
+
+
 
 }
-
-

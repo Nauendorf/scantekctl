@@ -13,10 +13,12 @@ class Cout
                                 Cout                  ();
                                 ~Cout                 ();
 
-        void                    Out                   (std::string output, Colour colour);
+        void                    Out                   (std::string O, Colour colour);
 
         //  Output text
         std::string O;  
+        std::string v = "\e[39mVersion:  1.0.0";
+        std::string U = "\nUsage:    scantekctl     <option>    <action>";
 
     private:
 

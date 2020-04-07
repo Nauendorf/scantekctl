@@ -2,7 +2,7 @@
 
 Module::Module()
 {
-
+  
 }
 
 Module::~Module()
@@ -33,16 +33,46 @@ std::vector<char*> Module::ReadDirectory(const char * dirPath)
     return dirList;
 }
 
+std::vector<char> Module::GenerateModuleID(int length)
+{
+    int n = charSet.length(); 
+    srand( time(NULL) );
+    char char_array[n + 1]; 
+    strcpy(char_array, charSet.c_str()); 
+
+    for (int i=0; i < 20; i++)
+    {
+        int RandIndex = rand() % 62;
+        moduleID.push_back(char_array[RandIndex]);
+    }  
+
+    return moduleID;
+}
+
+std::string Module::md5_from_file(std::string path)
+{
+    unsigned char result[MD5_DIGEST_LENGTH];
+    boost::iostreams::mapped_file_source src(path);
+    MD5((unsigned char*)src.data(), src.size(), result);
+
+    std::ostringstream sout;
+    sout<<std::hex<<std::setfill('0');
+    for(auto c: result) sout<<std::setw(2)<<(int)c;
+
+    return sout.str();
+}
+
+
+
 // Loops through Module_Root and creates an entry for any new scripts 
 void Module::AddModules()
 {
     
     // Loop through Module_Root for script files
-    Module mod = Module();
-    std::vector<char *> dirList = mod.ReadDirectory("/home/david");
+    std::vector<char *> dirList = ReadDirectory(module_path);
     for(std::vector<char *> :: iterator it = dirList.begin(); it != dirList.end(); ++it)
     {
-        mod = GetModule();
+        //mod = GetModule();
         if ( true )
         {
             // If the filename does not exist in module_config go ahead and obtain all necessary information about it
@@ -57,19 +87,19 @@ void Module::AddModules()
     }
 
     // Write it out to the config file
-    std::ofstream o(mConf["ctl_Config"]);
+    std::ofstream o(mConf);
     o << std::setw(4) << mConf << std::endl;
 
 }
 
-Module Module::GetModule()
-{
-    // read a JSON file
-    //std::ifstream i("file.json");
-    //i >> j;
-    Module t;
-    return t;
-}
+//Module Module::GetModule()
+//{
+//    // read a JSON file
+//    //std::ifstream i("file.json");
+//    //i >> j;
+//    Module t;
+//    return t;
+//}
 
 void Execute()
 {

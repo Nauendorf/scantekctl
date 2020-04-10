@@ -1,3 +1,6 @@
+g++ ./src/*.cpp -o ./bin/scantekctl -I ./inc/ -I `pkg-config --cflags --libs opencv` -lcrypto -lboost_system -lboost_iostreams
+
+
 turn of monitor
 xset dpms force off
 

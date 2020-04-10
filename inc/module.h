@@ -19,20 +19,39 @@ class Module
         void                        AddModules              ();
         void                        Execute                 ();
         std::vector<char*>          ReadDirectory           (const char * dirPath);
-        MyVecChar                   GenerateModuleID        (int length);
-        std::string md5_from_file(std::string path);
+        std::string                 GenerateModuleID        (int length);
+        std::string                 GetMD5Hash              (std::string path);
 
         // AddModules()   
-        std::vector<char> moduleID;
+        std::string moduleID;
         char * scriptHash;
         char * scriptName;
-        char * scriptDescription;
+        std::string scriptPath;
         char * scriptParams;  
+        char * scriptDescription;
+
+        nlohmann::json mConf;    // Module config json object
+        std::ostringstream oss;  // Output stream for json config
 
     private:
-        nlohmann::json mConf;  // Module config json object
-        const char * module_path  = "/opt/scantekctl/mods/scantekctl.json";
+
+        const char * modulePath  = "/opt/scantekctl/mods/";
+        const char * moduleConf  = "/opt/scantekctl/scantekctl.json";
+
+        // ReadDirectory()
+        DIR *dir;
+        MyVecCharS dirList;
+        struct dirent *ent;
+        
+        // GenerateModuleID()
         const std::string charSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; 
+        const int n = charSet.length();
+        std::vector<char> vec;
+
+        // GetMD5Hash()
+        unsigned char result[MD5_DIGEST_LENGTH];
+        std::ostringstream sout;
+        
 
 
 };

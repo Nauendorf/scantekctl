@@ -3,22 +3,15 @@
 int main(int argc, char*argv[])
 {
 
+    // Pass arguments to ParameterSet, interfaces with Execute
+    // Execute the ParameterSet
 
     Help h(argc, argv);
 
     Module mod;
-    int length = 10;
-    std::vector<char> str = mod.GenerateModuleID(20);
-    std::string s(str.begin(), str.end());
-    std::cout << s << "\n"; 
 
-
-    if(argc != 2) {
-        std::cerr<<"Must specify the file\n";
-        exit(-1);
-    }
-
-    std::cout<< mod.md5_from_file(argv[1])<<"  "<<argv[1]<<std::endl;
+ 
+    std::cout<< mod.GetMD5Hash(argv[1]);
     return 0;
 
 

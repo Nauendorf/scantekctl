@@ -17,18 +17,19 @@ class Module
         
         Module                      GetModule               ();
         void                        AddModules              ();
+        void                        GenerateModuleConfig    ();
         void                        Execute                 ();
         std::vector<char*>          ReadDirectory           (const char * dirPath);
         std::string                 GenerateModuleID        (int length);
         std::string                 GetMD5Hash              (std::string path);
+        MyVecStr                    GetScriptInfo           (std::string scriptPath);
 
         // AddModules()   
         std::string moduleID;
-        char * scriptHash;
         char * scriptName;
+        std::string scriptParams;  
+        std::string scriptDescription;
         std::string scriptPath;
-        char * scriptParams;  
-        char * scriptDescription;
 
         nlohmann::json mConf;    // Module config json object
         std::ostringstream oss;  // Output stream for json config

@@ -19,8 +19,8 @@
 #include <iomanip>
 #include <sstream>
 
-typedef std::map<std::string,std::string> MyMap;
-typedef std::vector<std::string> MyVecStr;
-typedef std::vector<char> MyVecChar;
-typedef std::vector<char*> MyVecCharS;
-typedef std::vector<int> MyVecInt;
+typedef std::map<std::string,std::string>   MyMap;
+typedef std::vector<std::string>            MyVecStr;
+typedef std::vector<char>                   MyVecChar;
+typedef std::vector<char*>                  MyVecCharS;
+typedef std::vector<int>                    MyVecInt;

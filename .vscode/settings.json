@@ -77,6 +77,7 @@
         "typeindex": "cpp",
         "any": "cpp",
         "rope": "cpp",
-        "scoped_allocator": "cpp"
+        "scoped_allocator": "cpp",
+        "csetjmp": "cpp"
     }
 }
